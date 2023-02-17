@@ -3,9 +3,9 @@ This is a alternative of `docker save` which you can only save layers not exists
 
 * What's the purpose of this tool
 
-Sometimes, we need to use `docker save` to dump the image and then transfer it to an enviroment without internet. We could have met a problem that the result filesize is always too big. 
+Sometimes, we need to use `docker save` to dump the image and then transfer it to an enviroment without internet. A problem could be met that the result filesize is always too big. 
 
-In fact, we may already have an old image in the dest server which is much the same with new image. This tool help you to save only the layers that doesn't exist in the old images.
+In fact, we may already have an old image in the dest server which is almost the same with new image. This tool helps you to save only the layers that doesn't exist in the old images.
 
 ## Install
 
@@ -46,9 +46,9 @@ partialdockersave -i image1 -i image2 -e imagetoexclude -o result.tgz
 
 * How is the directory name generated?
 
-We can find from https://github.com/moby/moby/blob/master/image/tarexport/save.go that the directory name is encoded from layer meta data. So we can do the same thing from infomation got from `docker image inspect`, then we can filter them when saving image.
+We can find from https://github.com/moby/moby/blob/master/image/tarexport/save.go that the directory name is encoded from layer meta data. Sothe same thing can be done from infomation got from `docker image inspect`, then filter them when saving image.
 
-Unlike other tools like `undocker`, `dive`, they should do a real save to get the tar file of all images, and then extract manifest from the tar file.  This tool brings no more io operation than normal `docker save`.
+Unlike other tools (Ex: `undocker`, `dive`), they should do a real save to get the tar file of all images, and then extract manifest from the tar file, it could be a bit slow especially when multiple images need to be saved at the same time.  This tool only compares the diff layer from `docker image inspect`,  thus brings no more io operation than normal `docker save`.
 
 ## Future works
 
