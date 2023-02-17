@@ -45,7 +45,12 @@ partialdockersave -i image1 -i image2 -e imagetoexclude -o result.tgz
 `docker save` can give us a tar file with one directory for each layer of the image. The key is to know which directory is not needed. 
 
 * How is the directory name generated?
+
 We can find from https://github.com/moby/moby/blob/master/image/tarexport/save.go that the directory name is encoded from layer meta data. So we can do the same thing from infomation got from `docker image inspect`, then we can filter them when saving image.
 
-Other than other tools like `undocker`, `dive`, they should do a real save to get the tar file of all images, and then extract manifest from the tar file.  This tool brings no more io operation than normal `docker save`.
+Unlike other tools like `undocker`, `dive`, they should do a real save to get the tar file of all images, and then extract manifest from the tar file.  This tool brings no more io operation than normal `docker save`.
 
+## Later works
+
+Other than raw images, we can do some work to analyze images in helm chart and compute the increment diff of two helm chart.
+This can be done by implement `ImageLike` interface for helm charts.
