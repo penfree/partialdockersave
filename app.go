@@ -64,10 +64,10 @@ type serverResponse struct {
 
 func (app *App) Run(args []string) {
 	var cliApp = cli.NewApp()
-	cliApp.Name = "Docker image tools"
+	cliApp.Name = "Save docker image without layers in `exclude`"
 	cliApp.Usage = ""
 	cliApp.Flags = []cli.Flag{
-		&cli.StringSliceFlag{
+		cli.StringSliceFlag{
 			Name:  "image, i",
 			Usage: "The image to save",
 		},
@@ -78,7 +78,7 @@ func (app *App) Run(args []string) {
 		cli.StringFlag{
 			Name:  "output, o",
 			Value: "image.tgz",
-			Usage: "The output tar file",
+			Usage: "The output tar.gz file",
 		},
 	}
 

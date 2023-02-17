@@ -38,6 +38,10 @@ func rawSaveImage(ctx context.Context, images []string, excludeLayers map[string
 	tarWriter := tar.NewWriter(gzipWriter)
 	defer tarWriter.Close()
 
+	skipSize := 0
+	keepSize := 0
+	skipedLayers := make(map[string]int)
+
 	// read original file, filter excluded layers and then write to output stream
 	for {
 		hdr, err := tr.Next()
@@ -48,14 +52,19 @@ func rawSaveImage(ctx context.Context, images []string, excludeLayers map[string
 		}
 		directory := strings.Split(hdr.Name, "/")[0]
 		if _, ok := excludeLayers[directory]; ok {
-			log.Infof("%s, Size: %v, Skipped", directory, hdr.Size)
+			if size, ok := skipedLayers[directory]; ok {
+				skipedLayers[directory] = size + int(hdr.Size)
+			} else {
+				skipedLayers[directory] = int(hdr.Size)
+			}
+			skipSize += int(hdr.Size)
 			continue
 		}
-		log.Infof("%s, Size: %v\n", directory, hdr.Size)
+		keepSize += int(hdr.Size)
 		tarWriter.WriteHeader(hdr)
 		io.Copy(tarWriter, tr)
 	}
-
+	log.Infof("%d bytes saved to %s, %d layers (%d bytes) skipped", keepSize, len(skipedLayers), skipSize)
 	return nil
 }
 
