@@ -64,7 +64,7 @@ func rawSaveImage(ctx context.Context, images []string, excludeLayers map[string
 		tarWriter.WriteHeader(hdr)
 		io.Copy(tarWriter, tr)
 	}
-	log.Infof("%d bytes saved to %s, %d layers (%d bytes) skipped", keepSize, len(skipedLayers), skipSize)
+	log.Infof("%d bytes saved to %s, %d layers (%d bytes) skipped", keepSize, filename, len(skipedLayers), skipSize)
 	return nil
 }
 
