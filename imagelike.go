@@ -32,12 +32,14 @@ func rawSaveImage(ctx context.Context, images []string, excludeLayers map[string
 		log.Errorf("Error writing archive: %v", err)
 	}
 	defer reader.Close()
+	defer out.Close()
 	// compress the output tar
 	gzipWriter := gzip.NewWriter(out)
 	defer gzipWriter.Close()
 	tarWriter := tar.NewWriter(gzipWriter)
 	defer tarWriter.Close()
 
+	// record skipped file size and skipped layers
 	skipSize := 0
 	keepSize := 0
 	skipedLayers := make(map[string]int)
@@ -50,6 +52,7 @@ func rawSaveImage(ctx context.Context, images []string, excludeLayers map[string
 		} else if err != nil {
 			log.Errorf("%v", err)
 		}
+		// directory is the layer id
 		directory := strings.Split(hdr.Name, "/")[0]
 		if _, ok := excludeLayers[directory]; ok {
 			if size, ok := skipedLayers[directory]; ok {
