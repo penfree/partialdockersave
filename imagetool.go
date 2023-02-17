@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"time"
 
+	"github.com/cloudflare/cfssl/log"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
 	"github.com/docker/docker/image"
@@ -38,7 +38,7 @@ func ConvertImageInspectToV1Image(ins types.ImageInspect) image.V1Image {
 func GetLayerIds(ctx context.Context, name string, client *client.Client) ([]string, error) {
 	inspectInfo, _, err := client.ImageInspectWithRaw(ctx, name)
 	if err != nil {
-		fmt.Errorf("inspect image failed, %v", err)
+		log.Errorf("inspect image failed, %v", err)
 	}
 	var parent digest.Digest
 	var layers []string

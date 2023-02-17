@@ -1,9 +1,10 @@
 # partialdockersave
+
 This is a alternative of `docker save` which you can only save layers not exists in specified image.
 
 * What's the purpose of this tool
 
-Sometimes, we need to use `docker save` to dump the image and then transfer it to an enviroment without internet. A problem could be met that the result filesize is always too big. 
+Sometimes, we need to use `docker save` to dump the image and then transfer it to an enviroment without internet. A problem could be met that the result filesize is always too big.
 
 In fact, we may already have an old image in the dest server which is almost the same with new image. This tool helps you to save only the layers that doesn't exist in the old images.
 
@@ -42,7 +43,7 @@ partialdockersave -i image1 -i image2 -e imagetoexclude -o result.tgz
 
 ## How it works
 
-`docker save` can give us a tar file with one directory for each layer of the image. The key is to know which directory is not needed. 
+`docker save` can give us a tar file with one directory for each layer of the image. The key is to know which directory is not needed.
 
 * How is the directory name generated?
 
@@ -54,3 +55,8 @@ Unlike other tools (Ex: `undocker`, `dive`), they should do a real save to get t
 
 Other than raw images, we can do some work to analyze images in helm chart and compute the increment diff of two helm chart.
 This can be done by implement `ImageLike` interface for helm charts.
+
+# Known issues
+
+* Only tested on Ubuntu 16.04, docker 19.03.8.
+* The latest layer id computed by this tool is not same with real layer id, it may cause that the latest layer will always be saved. But it's not a big issue, because you doesn't need to compare two identical image.
