@@ -11,7 +11,7 @@ In fact, we may already have an old image in the dest server which is almost the
 ## Install
 
 ```
-go get github.com/penfree/partialdockersave
+go install github.com/penfree/partialdockersave@latest
 ```
 
 ## Usage
