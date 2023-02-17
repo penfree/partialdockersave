@@ -7,13 +7,13 @@ Sometimes, we need to use `docker save` to dump the image and then transfer it t
 
 In fact, we may already have an old image in the dest server which is much the same with new image. This tool help you to save only the layers that doesn't exist in the old images.
 
-* Install
+## Install
 
 ```
 go get github.com/penfree/partialdockersave
 ```
 
-* Usage
+## Usage
 
 ```
 NAME:
@@ -33,9 +33,19 @@ GLOBAL OPTIONS:
    --version, -v              print the version
 ```
 
-* Example
+## Example
+
 ```bash
 # multiple -i & -e can be specified to include or exclude
 partialdockersave -i image1 -i image2 -e imagetoexclude -o result.tgz
 ```
+
+## How it works
+
+`docker save` can give us a tar file with one directory for each layer of the image. The key is to know which directory is not needed. 
+
+* How is the directory name generated?
+We can find from https://github.com/moby/moby/blob/master/image/tarexport/save.go that the directory name is encoded from layer meta data. So we can do the same thing from infomation got from `docker image inspect`, then we can filter them when saving image.
+
+Other than other tools like `undocker`, `dive`, they should do a real save to get the tar file of all images, and then extract manifest from the tar file.  This tool brings no more io operation than normal `docker save`.
 
