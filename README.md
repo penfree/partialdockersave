@@ -50,7 +50,7 @@ We can find from https://github.com/moby/moby/blob/master/image/tarexport/save.g
 
 Unlike other tools like `undocker`, `dive`, they should do a real save to get the tar file of all images, and then extract manifest from the tar file.  This tool brings no more io operation than normal `docker save`.
 
-## Later works
+## Future works
 
 Other than raw images, we can do some work to analyze images in helm chart and compute the increment diff of two helm chart.
 This can be done by implement `ImageLike` interface for helm charts.
