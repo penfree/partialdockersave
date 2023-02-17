@@ -15,6 +15,7 @@ go get github.com/penfree/partialdockersave
 
 * Usage
 
+```
 NAME:
    Save docker image without layers in `exclude`
 
@@ -30,6 +31,7 @@ GLOBAL OPTIONS:
    --output value, -o value   The output tar.gz file (default: "image.tgz")
    --help, -h                 show help
    --version, -v              print the version
+```
 
 * Example
 ```bash
