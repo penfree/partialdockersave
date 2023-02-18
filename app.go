@@ -3,11 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"io"
-	"io/ioutil"
-	"net/http"
-	"os"
-	"path/filepath"
 
 	"github.com/docker/docker/client"
 	cli "gopkg.in/urfave/cli.v1"
@@ -19,31 +14,6 @@ type App struct {
 	client *client.Client
 }
 
-// CopyToFile writes the content of the reader to the specified file
-func CopyToFile(outfile string, r io.Reader) error {
-	tmpFile, err := ioutil.TempFile(filepath.Dir(outfile), ".docker_temp_")
-	if err != nil {
-		return err
-	}
-
-	tmpPath := tmpFile.Name()
-
-	_, err = io.Copy(tmpFile, r)
-	tmpFile.Close()
-
-	if err != nil {
-		os.Remove(tmpPath)
-		return err
-	}
-
-	if err = os.Rename(tmpPath, outfile); err != nil {
-		os.Remove(tmpPath)
-		return err
-	}
-
-	return nil
-}
-
 func NewApp(ctx context.Context) *App {
 	dockerCli, err := client.NewClientWithOpts(client.FromEnv)
 	dockerCli.NegotiateAPIVersion(context.Background())
@@ -53,13 +23,6 @@ func NewApp(ctx context.Context) *App {
 	return &App{ctx: ctx,
 		client: dockerCli,
 	}
-}
-
-// serverResponse is a wrapper for http API responses.
-type serverResponse struct {
-	body       io.ReadCloser
-	header     http.Header
-	statusCode int
 }
 
 func (app *App) Run(args []string) {
